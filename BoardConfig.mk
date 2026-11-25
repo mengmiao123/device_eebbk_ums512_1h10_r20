@@ -82,7 +82,14 @@ BOARD_GROUP_UNISOC_PARTITION_SIZE := 9122611200 # TODO: Fix hardcoded value
 TARGET_BOARD_PLATFORM := ums512
 
 # Recovery
-BOARD_INCLUDE_RECOVERY_DTBO := true
+# R20 has a dedicated DTBO partition; the 8MB prebuilt dtbo.img is a raw
+# Unisoc blob, NOT a standard dt_table. Passing it via --recovery_dtbo makes
+# mkbootimg fail with "ValueError: DTB image must not be empty." Keep the
+# recovery self-contained (kernel + ramdisk only), as the stock recovery is.
+# IMPORTANT: build/core/Makefile gates this with `ifdef BOARD_INCLUDE_RECOVERY_DTBO`,
+# which tests whether the variable is DEFINED, not whether it equals "true".
+# So it must stay commented out entirely -- setting it to false is not enough.
+# BOARD_INCLUDE_RECOVERY_DTBO := true
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
