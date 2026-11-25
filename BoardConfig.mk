@@ -55,10 +55,11 @@ TARGET_KERNEL_SOURCE := kernel/eebbk/ums512_1h10
 TARGET_FORCE_PREBUILT_KERNEL := true
 ifeq ($(TARGET_FORCE_PREBUILT_KERNEL),true)
 TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
-# R20 has NO separate dtb (recovery_dt.img is 2 bytes); DTB info lives inside dtbo.
-# Do NOT append the A7 dtb.img -- it would break boot.
-# TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
-# BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
+# header v2 mkbootimg REQUIRES a valid DTB (else "DTB image must not be empty").
+# Use the DTB extracted from the stock R20 recovery.img (FDT @0x1995840,
+# 5563 bytes, sha256 fe3e8fcb4fda7d21a6e04a46604dbc38a83c15c2f95e7ab6c4ccd721767782aa).
+TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/recovery-dtb-official.bin
+BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
 BOARD_INCLUDE_DTB_IN_BOOTIMG :=
 BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
 BOARD_KERNEL_SEPARATED_DTBO := true
